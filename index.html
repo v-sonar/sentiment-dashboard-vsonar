@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Sentiment Analysis - Vishal Sonar</title>
+</head>
+<body>
+<h2>Sentiment Analysis Dashboard</h2>
+
+<textarea id="textInput" rows="4" cols="50" placeholder="Enter text here..."></textarea>
+<br><br>
+<button onclick="analyzeSentiment()">Analyze</button>
+
+<h3>Result:</h3>
+<p id="result"></p>
+
+<script>
+async function analyzeSentiment() {
+
+const endpoint = "https://sentiment-language-vsonar.cognitiveservices.azure.com";
+const key = "AN3BDNA1OxANtRONTskBnmwzM6FkvwrLfOyVwTSRomCz48eMhCjpJQQJ99CBACBsN54XJ3w3AAAaACOGqfuS";
+
+const response = await fetch(endpoint + "/language/:analyze-text?api-version=2023-04-01", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+"Ocp-Apim-Subscription-Key": key
+},
+body: JSON.stringify({
+kind: "SentimentAnalysis",
+analysisInput: {
+documents: [
+{
+id: "1",
+language: "en",
+text: document.getElementById("textInput").value
+}
+]
+}
+})
+});
+
+const data = await response.json();
+document.getElementById("result").innerText =
+"Sentiment: " + data.results.documents[0].sentiment;
+}
+</script>
+
+</body>
+</html>
